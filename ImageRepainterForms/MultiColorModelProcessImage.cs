@@ -8,15 +8,17 @@ namespace ImageRepainterForms {
         private List<IColor> listColorPalette;
         private int[,] differenceBetweenColorsIColor;
         private int[] sumDifferenceBetweenColorsIColor;
+        private Bitmap changedImage;
 
-        public MultiColorModelProcessImage() {
-
-        }
-
-
-        // 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="listColorsPalette"></param>
+        /// <param name="sourceImage"></param>
+        /// <param name="nameColorModel"></param>
+        /// <returns></returns>
         public Bitmap ProcessImageToMultiColorModel(List<Color> listColorsPalette, Bitmap sourceImage, string nameColorModel) {
-            Bitmap changedImage = (Bitmap)sourceImage.Clone();
+            changedImage = (Bitmap)sourceImage.Clone();
 
             listColorPalette = new List<IColor>();
 
@@ -63,9 +65,13 @@ namespace ImageRepainterForms {
 
             return changedImage;
         }
-
-
-        // 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pixelColor"></param>
+        /// <param name="index"></param>
+        /// <param name="nameColorModel"></param>
         private void GetDifferenceBetweenColorsIColor(Color pixelColor, int index, string nameColorModel) {
             switch (nameColorModel) {
                 case "RGB":
@@ -106,8 +112,12 @@ namespace ImageRepainterForms {
             }
         }
 
-
-        // Получить результат вычитания наименьшего числа из наибольшего числа
+        /// <summary>
+        /// Получить результат вычитания наименьшего числа из наибольшего числа
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         private int SubtractFromLargest(int a, int b) {
             return Math.Abs(a - b);
         }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ImageRepainterForms {
     public partial class Form1 : Form {
         private Logic logic;
+        private Thread thread;
 
         public Form1() {
             InitializeComponent();
@@ -12,6 +14,7 @@ namespace ImageRepainterForms {
             saveFileDialogImage.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Results";
             openFileDialogPalette.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Palette";
             saveFileDialogPalette.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Palette";
+            comboBoxColorModels.SelectedIndex = 0;
 
             logic = new Logic(this);
         }
@@ -19,7 +22,16 @@ namespace ImageRepainterForms {
 
         // Обработка изображения (поиск похожих цветов из палитры в выбранной цветовой модели)
         private void buttonProcessImageToMultiColorModel_Click(object sender, EventArgs e) {
-            logic.ProcessImageToMultiColorModel();
+            if (thread != null) {
+                thread.Abort();
+            }
+
+            thread = new Thread(logic.ProcessImageToMultiColorModel);
+            thread.Start();
+
+            timerCheckingProcessImage.Start();
+
+            buttonProcessImage.Enabled = false;
         }
 
 
@@ -62,7 +74,6 @@ namespace ImageRepainterForms {
         // Включение/Выключение пользовательской палитры
         private void checkBoxUseCustomListColor_CheckedChanged(object sender, EventArgs e) {
             groupBoxListColors.Enabled = checkBoxUseCustomListColor.Checked;
-            tableLayoutPanelPaletteByImage.Enabled = !checkBoxUseCustomListColor.Checked;
         }
 
 
@@ -70,6 +81,14 @@ namespace ImageRepainterForms {
         private void checkBoxPaletteByImage_CheckedChanged(object sender, EventArgs e) {
             tableLayoutPanelChunkSizes.Enabled = (sender as CheckBox).Checked;
             checkBoxUseCustomListColor.Enabled = !(sender as CheckBox).Checked;
+        }
+
+        private void timerCheckingProcessImage_Tick(object sender, EventArgs e) {
+            if (!thread.IsAlive) {
+                timerCheckingProcessImage.Stop();
+                buttonProcessImage.Enabled = true;
+                MessageBox.Show(Properties.Resources.textImageFinishedProcessing);
+            }
         }
     }
 }

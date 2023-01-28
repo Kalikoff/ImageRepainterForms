@@ -2,12 +2,11 @@
 
 namespace ImageRepainterForms {
     class Effects {
-        public Effects() {
-
-        }
-
-
-        // Эффект инверсии изображения
+        /// <summary>
+        /// Эффект инверсия изображения
+        /// </summary>
+        /// <param name="sourceImage"></param>
+        /// <returns></returns>
         public Bitmap ImageColorInversion(Bitmap sourceImage) {
             Bitmap changedImage = (Bitmap)sourceImage.Clone();
 
@@ -19,6 +18,7 @@ namespace ImageRepainterForms {
                     changedImage.SetPixel(j, i, replaceableColor);
                 }
             }
+
             return changedImage;
         }
     }

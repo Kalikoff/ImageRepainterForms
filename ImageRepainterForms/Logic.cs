@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ImageRepainterForms {
     class Logic {
-        private Form1 mainForm;
-
+        private MainForm mainForm;
         private Checks checks;
         private MultiColorModelProcessImage multiColorModelProcessImage;
         private Effects effects;
 
         private int _countColors = 0; // Количество цветов
-        private int _indexElement = 0; // 
+        private int _idElement = 0; // ID цвета для Настраиваемой палитры
 
         private List<Color> _listColorsPalette; // Лист цветов из палитры
         private List<PictureBox> _listPictureBoxs; // Лист PictureBox
@@ -24,8 +24,10 @@ namespace ImageRepainterForms {
         private Bitmap _changedImage; // Обработанная картинка
         private Bitmap _palette; // Палитра
 
-        public Logic(Form1 form1) {
-            mainForm = form1;
+        private Thread _thread; // Поток обрабоки изображения
+
+        public Logic(MainForm mainForm) {
+            this.mainForm = mainForm;
 
             checks = new Checks();
             multiColorModelProcessImage = new MultiColorModelProcessImage();
@@ -35,35 +37,17 @@ namespace ImageRepainterForms {
         /// <summary>
         /// Обработка изображения (поиск похожих цветов из палитры в выбранной цветовой модели)
         /// </summary>
-        public void ProcessImageToMultiColorModel() {
-            if (checks.CheckingIsEmptyUploadedImage(_sourceImage)) { // Проверка пустое ли изображение
-                return;
+        public void ProcessImageToSelectedColorModel() {
+            if (_thread != null) {
+                _thread.Abort();
             }
 
-            if (mainForm.checkBoxUseCustomListColor.Checked && checks.CheckingAmountCustomColors(_countColors)) { // Проверка количество своих цветов
-                return;
-            }
+            _thread = new Thread(GetChangedImage);
+            _thread.Start();
 
-            if (mainForm.checkBoxPaletteByImage.Checked) { // Проверка включена ли создание палитры на основе картинки
-                CreatePaletteByImage();
-            }
-
-            if (!mainForm.checkBoxUseCustomListColor.Checked && checks.CheckingIsEmptyPaletteImage(_palette, Properties.Resources.infoPaletteNotUploaded)) { // Проверка загружена ли палитра
-                return;
-            }
-
-            if (checks.CheckingComboBoxForErrors(mainForm.comboBoxColorModels)) { // Проверка ComboBox на существующие цветовые модели
-                return;
-            }
-
-            GetListColors();
-
-            string selectColorModel = mainForm.comboBoxColorModels.SelectedItem.ToString();
-            _changedImage = multiColorModelProcessImage.ProcessImageToMultiColorModel(_listColorsPalette, _sourceImage, selectColorModel);
-
-            SetImageToPictureBox(_changedImage);
+            mainForm.timerThreadIsAlive.Start();
+            mainForm.timerProgressBarUpdate.Start();
         }
-
 
         /// <summary>
         /// Загрузка изображения из меню
@@ -75,12 +59,11 @@ namespace ImageRepainterForms {
             }
         }
 
-
         /// <summary>
         /// Сохранение изображения из меню
         /// </summary>
         public void SaveProcessImage() {
-            if (checks.CheckingIsEmptyImageToSave(_changedImage)) {
+            if (checks.CheckingIsEmptyСhangedImageToSave(_changedImage)) {
                 return;
             }
 
@@ -89,12 +72,11 @@ namespace ImageRepainterForms {
             }
         }
 
-
         /// <summary>
         /// Загрузка палитры цветов из меню
         /// </summary>
         public void LoadPalette() {
-            if (checks.CheckingCanLoadPaletteFromFile(mainForm.checkBoxPaletteByImage)) {
+            if (checks.CheckingCanLoadPaletteFromFile(mainForm.checkBoxCreatePaletteByImage)) {
                 return;
             }
 
@@ -102,7 +84,6 @@ namespace ImageRepainterForms {
                 _palette = new Bitmap(mainForm.openFileDialogPalette.FileName);
             }
         }
-
 
         /// <summary>
         /// Сохранение палитры из меню
@@ -112,7 +93,7 @@ namespace ImageRepainterForms {
                 return;
             }
 
-            if (mainForm.checkBoxUseCustomListColor.Checked) {
+            if (mainForm.checkBoxUseCustomPalette.Checked) {
                 GetListPictureBoxs();
 
                 if (checks.CheckingListPictureBoxsForEmptiness(_listPictureBoxs)) {
@@ -121,13 +102,12 @@ namespace ImageRepainterForms {
 
                 CreatePaletteFromPictureBox();
             }
-            else if (mainForm.checkBoxPaletteByImage.Checked) {
+            else if (mainForm.checkBoxCreatePaletteByImage.Checked) {
                 if (mainForm.saveFileDialogPalette.ShowDialog() == DialogResult.OK) {
                     _palette.Save(mainForm.saveFileDialogPalette.FileName, ImageFormat.Png);
                 }
             }
         }
-
 
         /// <summary>
         /// Инверсия цветов изображения из меню
@@ -142,7 +122,6 @@ namespace ImageRepainterForms {
             SetImageToPictureBox(_changedImage);
         }
 
-
         /// <summary>
         /// Добавление нового цвета
         /// </summary>
@@ -151,16 +130,16 @@ namespace ImageRepainterForms {
                 BackColor = Color.White,
                 Size = new Size(32, 32),
                 Anchor = AnchorStyles.None,
-                Tag = _indexElement
+                Tag = _idElement
             };
             pictureBox.Click += pictureBoxSelectColorOnClick;
             mainForm.flowLayoutPanelCustomListColor.Controls.Add(pictureBox);
 
             Button button = new Button {
-                Size = new Size(75, 23),
+                Size = new Size(100, 23),
                 Text = Properties.Resources.textDelete,
                 Anchor = AnchorStyles.None,
-                Tag = _indexElement
+                Tag = _idElement
             };
             button.Click += buttonDeleteColorOnClick;
             mainForm.flowLayoutPanelCustomListColor.Controls.Add(button);
@@ -175,21 +154,80 @@ namespace ImageRepainterForms {
             mainForm.flowLayoutPanelCustomListColor.ResumeLayout();
 
             _countColors++;
-            _indexElement++;
+            _idElement++;
         }
 
+        /// <summary>
+        /// Проверка состояния потока
+        /// </summary>
+        public void CheckThreadIsAlive() {
+            if (!_thread.IsAlive) {
+                mainForm.timerThreadIsAlive.Stop();
+                mainForm.timerProgressBarUpdate.Stop();
+                mainForm.buttonProcessImage.Enabled = true;
+                mainForm.progressBarImageProcessing.Value = 0;
+
+                MessageBox.Show(Properties.Resources.textImageFinishedProcessing);
+            }
+        }
+
+        /// <summary>
+        /// Обновление значения ProgressBar
+        /// </summary>
+        public void UpdateProgressBar() {
+            int max = multiColorModelProcessImage.GetPercentageOfProcessedPixels();
+
+            if (mainForm.progressBarImageProcessing.Value < max) {
+                mainForm.progressBarImageProcessing.Value = max;
+            }
+
+            if (mainForm.progressBarImageProcessing.Value == mainForm.progressBarImageProcessing.Maximum) {
+                mainForm.progressBarImageProcessing.Value = 0;
+            }
+        }
+
+        /// <summary>
+        /// Получить обработанное изображение
+        /// </summary>
+        private void GetChangedImage() {
+            if (checks.CheckingIsEmptyUploadedImage(_sourceImage)) {
+                return;
+            }
+
+            if (mainForm.checkBoxUseCustomPalette.Checked && checks.CheckingAmountCustomColors(_countColors)) {
+                return;
+            }
+
+            if (mainForm.checkBoxCreatePaletteByImage.Checked) {
+                CreatePaletteByImage();
+            }
+
+            if (!mainForm.checkBoxUseCustomPalette.Checked &&
+                checks.CheckingIsEmptyPaletteImage(_palette, Properties.Resources.infoPaletteNotUploaded)) {
+                return;
+            }
+
+            if (checks.CheckingComboBoxForExistenceSelectedColorModel(mainForm.comboBoxColorModels)) {
+                return;
+            }
+
+            mainForm.buttonProcessImage.Enabled = false;
+
+            GetListColors();
+
+            _changedImage = multiColorModelProcessImage.ProcessImageInSelectedColorModel(_listColorsPalette, _sourceImage, mainForm.comboBoxColorModels.SelectedItem.ToString());
+
+            SetImageToPictureBox(_changedImage);
+        }
 
         /// <summary>
         /// Выбор цвета в Списке цветов
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void pictureBoxSelectColorOnClick(object sender, EventArgs e) {
             if (mainForm.colorDialogSelectionPictureBox.ShowDialog() == DialogResult.OK) {
                 (sender as PictureBox).BackColor = mainForm.colorDialogSelectionPictureBox.Color;
             }
         }
-
 
         /// <summary>
         /// Удаление цвета в Списке цветов
@@ -222,19 +260,17 @@ namespace ImageRepainterForms {
             _countColors--;
         }
 
-
         /// <summary>
         /// Получить список цветов для палитры
         /// </summary>
         private void GetListColors() {
-            if (mainForm.checkBoxUseCustomListColor.Checked) {
+            if (mainForm.checkBoxUseCustomPalette.Checked) {
                 _listColorsPalette = GetListColorsFromPictureBox();
             }
             else {
                 _listColorsPalette = GetListColorsFromSelectedPalette();
             }
         }
-
 
         /// <summary>
         /// Получить список цветов из PictureBox
@@ -252,7 +288,6 @@ namespace ImageRepainterForms {
             return listColors;
         }
 
-
         /// <summary>
         /// Получить список цветов из палитры
         /// </summary>
@@ -269,7 +304,6 @@ namespace ImageRepainterForms {
             return listColors;
         }
 
-
         /// <summary>
         /// Получить список всех PictureBox
         /// </summary>
@@ -280,7 +314,6 @@ namespace ImageRepainterForms {
                 _listPictureBoxs.Add(control);
             }
         }
-
 
         /// <summary>
         /// Получить список всех Button
@@ -293,7 +326,6 @@ namespace ImageRepainterForms {
             }
         }
 
-
         /// <summary>
         /// Установка изображения из Bitmap
         /// </summary>
@@ -301,7 +333,6 @@ namespace ImageRepainterForms {
         private void SetImageToPictureBox(Bitmap bitmap) {
             mainForm.pictureBoxPreview.Image = new Bitmap(bitmap);
         }
-
 
         /// <summary>
         /// Создание палитры на основе картинки
@@ -339,7 +370,6 @@ namespace ImageRepainterForms {
             }
         }
 
-
         /// <summary>
         /// Получение среднего цвета из чанка
         /// </summary>
@@ -373,7 +403,6 @@ namespace ImageRepainterForms {
             return avgColor;
         }
 
-
         /// <summary>
         /// Проверка на добавление цвета в List, если его ещё там нету
         /// </summary>
@@ -394,7 +423,6 @@ namespace ImageRepainterForms {
 
             return flag;
         }
-
 
         /// <summary>
         /// Создание палитры из Своих цветов

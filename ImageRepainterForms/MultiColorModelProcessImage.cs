@@ -5,22 +5,26 @@ using System.Drawing;
 
 namespace ImageRepainterForms {
     class MultiColorModelProcessImage {
-        private List<IColor> listColorPalette;
-        private int[,] differenceBetweenColorsIColor;
-        private int[] sumDifferenceBetweenColorsIColor;
-        private Bitmap changedImage;
+        private List<IColor> _listColorPalette; // List цветов выбранной цветовой модели
+        private int[,] _differenceBetweenColorsIColor; // Разница по каждому каналу в выбранной цветовой модели
+        private int[] _sumDifferenceBetweenColorsIColor; // Сумма разницц по каждому каналу в выбранной цветовой модели
+        private Bitmap _changedImage; // Обработанное изображение
+        private static int _imageProcessingProgress; // Прогресс обработки изображения (от 0 до 100)
 
         /// <summary>
-        /// 
+        /// Обработать изображение в выбранной цветовой модели
         /// </summary>
         /// <param name="listColorsPalette"></param>
         /// <param name="sourceImage"></param>
         /// <param name="nameColorModel"></param>
         /// <returns></returns>
-        public Bitmap ProcessImageToMultiColorModel(List<Color> listColorsPalette, Bitmap sourceImage, string nameColorModel) {
-            changedImage = (Bitmap)sourceImage.Clone();
+        public Bitmap ProcessImageInSelectedColorModel(List<Color> listColorsPalette, Bitmap sourceImage, string nameColorModel) {
+            _changedImage = (Bitmap)sourceImage.Clone();
+            _imageProcessingProgress = 0;
 
-            listColorPalette = new List<IColor>();
+            int numberPixelsInImage = sourceImage.Width * sourceImage.Height; // Количество пикселей в изображении
+
+            _listColorPalette = new List<IColor>();
 
             foreach (Color color in listColorsPalette) {
                 IColor iColor = null;
@@ -33,81 +37,92 @@ namespace ImageRepainterForms {
                     case "XYZ": iColor = ColorHelper.ColorConverter.RgbToXyz(rgb); break;
                 }
 
-                listColorPalette.Add(iColor);
+                _listColorPalette.Add(iColor);
             }
 
-            for (int i = 0; i < changedImage.Height; i++) {
-                for (int j = 0; j < changedImage.Width; j++) {
-                    differenceBetweenColorsIColor = new int[3, listColorPalette.Count];
-                    sumDifferenceBetweenColorsIColor = new int[listColorPalette.Count];
+            for (int i = 0; i < _changedImage.Height; i++) {
+                for (int j = 0; j < _changedImage.Width; j++) {
+                    _differenceBetweenColorsIColor = new int[3, _listColorPalette.Count];
+                    _sumDifferenceBetweenColorsIColor = new int[_listColorPalette.Count];
 
-                    Color pixelColor = changedImage.GetPixel(j, i);
+                    Color pixelColor = _changedImage.GetPixel(j, i);
 
-                    for (int k = 0; k < listColorPalette.Count; k++) {
+                    for (int k = 0; k < _listColorPalette.Count; k++) {
                         GetDifferenceBetweenColorsIColor(pixelColor, k, nameColorModel);
 
-                        sumDifferenceBetweenColorsIColor[k] = differenceBetweenColorsIColor[0, k] + differenceBetweenColorsIColor[1, k] + differenceBetweenColorsIColor[2, k];
+                        _sumDifferenceBetweenColorsIColor[k] = _differenceBetweenColorsIColor[0, k] + _differenceBetweenColorsIColor[1, k] + _differenceBetweenColorsIColor[2, k];
                     }
 
-                    int min = sumDifferenceBetweenColorsIColor[0], indexMin = 0;
-                    for (int l = 1; l < listColorPalette.Count; l++) {
-                        if (sumDifferenceBetweenColorsIColor[l] < min) {
-                            min = sumDifferenceBetweenColorsIColor[l];
+                    int min = _sumDifferenceBetweenColorsIColor[0], indexMin = 0;
+                    for (int l = 1; l < _listColorPalette.Count; l++) {
+                        if (_sumDifferenceBetweenColorsIColor[l] < min) {
+                            min = _sumDifferenceBetweenColorsIColor[l];
                             indexMin = l;
                         }
                     }
 
                     Color replaceableColor = listColorsPalette[indexMin];
 
-                    changedImage.SetPixel(j, i, replaceableColor);
+                    _changedImage.SetPixel(j, i, replaceableColor);
+
+                    int numberProcessedPixels = (i + 1) * (j + 1); // Количество обработанных пикселей
+                    _imageProcessingProgress = numberProcessedPixels / (numberPixelsInImage / 100);
                 }
             }
 
-            return changedImage;
+            return _changedImage;
         }
-        
+
         /// <summary>
-        /// 
+        /// Получить количество обработанных пикселей в процентах
         /// </summary>
-        /// <param name="pixelColor"></param>
-        /// <param name="index"></param>
-        /// <param name="nameColorModel"></param>
+        /// <returns></returns>
+        public int GetPercentageOfProcessedPixels() {
+            return _imageProcessingProgress;
+        }
+
+        /// <summary>
+        /// Получить разницу по каждому каналу между пикселем изображения и цветом из палитры, в выбранной цветовой модели
+        /// </summary>
+        /// <param name="pixelColor">Цвет пикселя в RGB</param>
+        /// <param name="index">Индекс массива</param>
+        /// <param name="nameColorModel">Название цветовой модели</param>
         private void GetDifferenceBetweenColorsIColor(Color pixelColor, int index, string nameColorModel) {
             switch (nameColorModel) {
                 case "RGB":
                     RGB pixelColorRGB = new RGB(pixelColor.R, pixelColor.G, pixelColor.B);
-                    RGB pixelListColorsRGB = (RGB)listColorPalette[index];
+                    RGB pixelListColorsRGB = (RGB)_listColorPalette[index];
 
-                    differenceBetweenColorsIColor[0, index] = SubtractFromLargest(pixelColorRGB.R, pixelListColorsRGB.R);
-                    differenceBetweenColorsIColor[1, index] = SubtractFromLargest(pixelColorRGB.G, pixelListColorsRGB.G);
-                    differenceBetweenColorsIColor[2, index] = SubtractFromLargest(pixelColorRGB.B, pixelListColorsRGB.B);
+                    _differenceBetweenColorsIColor[0, index] = SubtractFromLargest(pixelColorRGB.R, pixelListColorsRGB.R);
+                    _differenceBetweenColorsIColor[1, index] = SubtractFromLargest(pixelColorRGB.G, pixelListColorsRGB.G);
+                    _differenceBetweenColorsIColor[2, index] = SubtractFromLargest(pixelColorRGB.B, pixelListColorsRGB.B);
                     break;
 
                 case "HSL":
                     HSL pixelColorHSL = ColorHelper.ColorConverter.RgbToHsl(new RGB(pixelColor.R, pixelColor.G, pixelColor.B));
-                    HSL pixelListColorsHSL = (HSL)listColorPalette[index];
+                    HSL pixelListColorsHSL = (HSL)_listColorPalette[index];
 
-                    differenceBetweenColorsIColor[0, index] = SubtractFromLargest(pixelColorHSL.H, pixelListColorsHSL.H);
-                    differenceBetweenColorsIColor[1, index] = SubtractFromLargest(pixelColorHSL.S, pixelListColorsHSL.S);
-                    differenceBetweenColorsIColor[2, index] = SubtractFromLargest(pixelColorHSL.L, pixelListColorsHSL.L);
+                    _differenceBetweenColorsIColor[0, index] = SubtractFromLargest(pixelColorHSL.H, pixelListColorsHSL.H);
+                    _differenceBetweenColorsIColor[1, index] = SubtractFromLargest(pixelColorHSL.S, pixelListColorsHSL.S);
+                    _differenceBetweenColorsIColor[2, index] = SubtractFromLargest(pixelColorHSL.L, pixelListColorsHSL.L);
                     break;
 
                 case "HSV":
                     HSV pixelColorHSV = ColorHelper.ColorConverter.RgbToHsv(new RGB(pixelColor.R, pixelColor.G, pixelColor.B));
-                    HSV pixelListColorsHSV = (HSV)listColorPalette[index];
+                    HSV pixelListColorsHSV = (HSV)_listColorPalette[index];
 
-                    differenceBetweenColorsIColor[0, index] = SubtractFromLargest(pixelColorHSV.H, pixelListColorsHSV.H);
-                    differenceBetweenColorsIColor[1, index] = SubtractFromLargest(pixelColorHSV.S, pixelListColorsHSV.S);
-                    differenceBetweenColorsIColor[2, index] = SubtractFromLargest(pixelColorHSV.V, pixelListColorsHSV.V);
+                    _differenceBetweenColorsIColor[0, index] = SubtractFromLargest(pixelColorHSV.H, pixelListColorsHSV.H);
+                    _differenceBetweenColorsIColor[1, index] = SubtractFromLargest(pixelColorHSV.S, pixelListColorsHSV.S);
+                    _differenceBetweenColorsIColor[2, index] = SubtractFromLargest(pixelColorHSV.V, pixelListColorsHSV.V);
                     break;
 
                 case "XYZ":
                     XYZ pixelColorXYZ = ColorHelper.ColorConverter.RgbToXyz(new RGB(pixelColor.R, pixelColor.G, pixelColor.B));
-                    XYZ pixelListColorsXYZ = (XYZ)listColorPalette[index];
+                    XYZ pixelListColorsXYZ = (XYZ)_listColorPalette[index];
 
-                    differenceBetweenColorsIColor[0, index] = SubtractFromLargest((int)pixelColorXYZ.X, (int)pixelListColorsXYZ.X);
-                    differenceBetweenColorsIColor[1, index] = SubtractFromLargest((int)pixelColorXYZ.Y, (int)pixelListColorsXYZ.Y);
-                    differenceBetweenColorsIColor[2, index] = SubtractFromLargest((int)pixelColorXYZ.Z, (int)pixelListColorsXYZ.Z);
+                    _differenceBetweenColorsIColor[0, index] = SubtractFromLargest((int)pixelColorXYZ.X, (int)pixelListColorsXYZ.X);
+                    _differenceBetweenColorsIColor[1, index] = SubtractFromLargest((int)pixelColorXYZ.Y, (int)pixelListColorsXYZ.Y);
+                    _differenceBetweenColorsIColor[2, index] = SubtractFromLargest((int)pixelColorXYZ.Z, (int)pixelListColorsXYZ.Z);
                     break;
             }
         }

@@ -1,6 +1,6 @@
 ﻿
 namespace ImageRepainterForms {
-    partial class Form1 {
+    partial class MainForm {
         /// <summary>
         /// Обязательная переменная конструктора.
         /// </summary>
@@ -43,28 +43,32 @@ namespace ImageRepainterForms {
             this.openFileDialogImage = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialogImage = new System.Windows.Forms.SaveFileDialog();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.buttonProcessImage = new System.Windows.Forms.Button();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.comboBoxColorModels = new System.Windows.Forms.ComboBox();
+            this.buttonProcessImage = new System.Windows.Forms.Button();
             this.tableLayoutPanelPaletteByImage = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBoxPaletteByImage = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanelChunkSizes = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDownChunkWidth = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownChunkHeight = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxUseCustomListColor = new System.Windows.Forms.CheckBox();
+            this.checkBoxCreatePaletteByImage = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseCustomPalette = new System.Windows.Forms.CheckBox();
             this.openFileDialogPalette = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialogPalette = new System.Windows.Forms.SaveFileDialog();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.timerCheckingProcessImage = new System.Windows.Forms.Timer(this.components);
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.progressBarImageProcessing = new System.Windows.Forms.ProgressBar();
+            this.timerThreadIsAlive = new System.Windows.Forms.Timer(this.components);
+            this.timerProgressBarUpdate = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.groupBoxListColors.SuspendLayout();
             this.flowLayoutPanelCustomListColor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanelPaletteByImage.SuspendLayout();
             this.tableLayoutPanelChunkSizes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownChunkWidth)).BeginInit();
@@ -72,7 +76,7 @@ namespace ImageRepainterForms {
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -83,7 +87,7 @@ namespace ImageRepainterForms {
             this.effectsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(820, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(826, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -153,9 +157,9 @@ namespace ImageRepainterForms {
             this.groupBoxListColors.Controls.Add(this.flowLayoutPanelCustomListColor);
             this.groupBoxListColors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxListColors.Enabled = false;
-            this.groupBoxListColors.Location = new System.Drawing.Point(3, 41);
+            this.groupBoxListColors.Location = new System.Drawing.Point(3, 44);
             this.groupBoxListColors.Name = "groupBoxListColors";
-            this.groupBoxListColors.Size = new System.Drawing.Size(150, 335);
+            this.groupBoxListColors.Size = new System.Drawing.Size(150, 366);
             this.groupBoxListColors.TabIndex = 1;
             this.groupBoxListColors.TabStop = false;
             this.groupBoxListColors.Text = "Список цветов";
@@ -167,14 +171,16 @@ namespace ImageRepainterForms {
             this.flowLayoutPanelCustomListColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelCustomListColor.Location = new System.Drawing.Point(3, 16);
             this.flowLayoutPanelCustomListColor.Name = "flowLayoutPanelCustomListColor";
-            this.flowLayoutPanelCustomListColor.Size = new System.Drawing.Size(144, 316);
+            this.flowLayoutPanelCustomListColor.Size = new System.Drawing.Size(144, 347);
             this.flowLayoutPanelCustomListColor.TabIndex = 0;
             // 
             // buttonAddColor
             // 
-            this.buttonAddColor.Location = new System.Drawing.Point(3, 3);
+            this.buttonAddColor.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonAddColor.Location = new System.Drawing.Point(2, 2);
+            this.buttonAddColor.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAddColor.Name = "buttonAddColor";
-            this.buttonAddColor.Size = new System.Drawing.Size(113, 23);
+            this.buttonAddColor.Size = new System.Drawing.Size(139, 23);
             this.buttonAddColor.TabIndex = 3;
             this.buttonAddColor.Text = "Добавить цвет";
             this.buttonAddColor.UseVisualStyleBackColor = true;
@@ -216,23 +222,27 @@ namespace ImageRepainterForms {
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelPaletteByImage, 3, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 394);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 428);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(814, 82);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(820, 86);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
-            // buttonProcessImage
+            // tableLayoutPanel5
             // 
-            this.buttonProcessImage.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonProcessImage.Location = new System.Drawing.Point(26, 33);
-            this.buttonProcessImage.Name = "buttonProcessImage";
-            this.buttonProcessImage.Size = new System.Drawing.Size(145, 36);
-            this.buttonProcessImage.TabIndex = 6;
-            this.buttonProcessImage.Text = "Обработать изображение";
-            this.buttonProcessImage.UseVisualStyleBackColor = true;
-            this.buttonProcessImage.Click += new System.EventHandler(this.buttonProcessImageToMultiColorModel_Click);
+            this.tableLayoutPanel5.ColumnCount = 1;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Controls.Add(this.comboBoxColorModels, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.buttonProcessImage, 0, 1);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 2;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34.93976F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65.06024F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(199, 80);
+            this.tableLayoutPanel5.TabIndex = 11;
             // 
             // comboBoxColorModels
             // 
@@ -243,37 +253,36 @@ namespace ImageRepainterForms {
             "HSL",
             "HSV",
             "XYZ"});
-            this.comboBoxColorModels.Location = new System.Drawing.Point(26, 3);
+            this.comboBoxColorModels.Location = new System.Drawing.Point(27, 3);
             this.comboBoxColorModels.Name = "comboBoxColorModels";
             this.comboBoxColorModels.Size = new System.Drawing.Size(145, 21);
             this.comboBoxColorModels.TabIndex = 9;
+            // 
+            // buttonProcessImage
+            // 
+            this.buttonProcessImage.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonProcessImage.Location = new System.Drawing.Point(27, 35);
+            this.buttonProcessImage.Name = "buttonProcessImage";
+            this.buttonProcessImage.Size = new System.Drawing.Size(145, 36);
+            this.buttonProcessImage.TabIndex = 6;
+            this.buttonProcessImage.Text = "Обработать изображение";
+            this.buttonProcessImage.UseVisualStyleBackColor = true;
+            this.buttonProcessImage.Click += new System.EventHandler(this.buttonProcessImageToMultiColorModel_Click);
             // 
             // tableLayoutPanelPaletteByImage
             // 
             this.tableLayoutPanelPaletteByImage.ColumnCount = 1;
             this.tableLayoutPanelPaletteByImage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelPaletteByImage.Controls.Add(this.tableLayoutPanelChunkSizes, 0, 1);
-            this.tableLayoutPanelPaletteByImage.Controls.Add(this.checkBoxPaletteByImage, 0, 0);
+            this.tableLayoutPanelPaletteByImage.Controls.Add(this.checkBoxCreatePaletteByImage, 0, 0);
             this.tableLayoutPanelPaletteByImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelPaletteByImage.Location = new System.Drawing.Point(612, 3);
+            this.tableLayoutPanelPaletteByImage.Location = new System.Drawing.Point(618, 3);
             this.tableLayoutPanelPaletteByImage.Name = "tableLayoutPanelPaletteByImage";
             this.tableLayoutPanelPaletteByImage.RowCount = 2;
             this.tableLayoutPanelPaletteByImage.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanelPaletteByImage.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanelPaletteByImage.Size = new System.Drawing.Size(199, 76);
+            this.tableLayoutPanelPaletteByImage.Size = new System.Drawing.Size(199, 80);
             this.tableLayoutPanelPaletteByImage.TabIndex = 10;
-            // 
-            // checkBoxPaletteByImage
-            // 
-            this.checkBoxPaletteByImage.AutoSize = true;
-            this.checkBoxPaletteByImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxPaletteByImage.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxPaletteByImage.Name = "checkBoxPaletteByImage";
-            this.checkBoxPaletteByImage.Size = new System.Drawing.Size(193, 24);
-            this.checkBoxPaletteByImage.TabIndex = 0;
-            this.checkBoxPaletteByImage.Text = "Палитра на основе картинки";
-            this.checkBoxPaletteByImage.UseVisualStyleBackColor = true;
-            this.checkBoxPaletteByImage.CheckedChanged += new System.EventHandler(this.checkBoxPaletteByImage_CheckedChanged);
             // 
             // tableLayoutPanelChunkSizes
             // 
@@ -286,18 +295,18 @@ namespace ImageRepainterForms {
             this.tableLayoutPanelChunkSizes.Controls.Add(this.numericUpDownChunkHeight, 2, 0);
             this.tableLayoutPanelChunkSizes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelChunkSizes.Enabled = false;
-            this.tableLayoutPanelChunkSizes.Location = new System.Drawing.Point(3, 33);
+            this.tableLayoutPanelChunkSizes.Location = new System.Drawing.Point(3, 35);
             this.tableLayoutPanelChunkSizes.Name = "tableLayoutPanelChunkSizes";
             this.tableLayoutPanelChunkSizes.RowCount = 1;
             this.tableLayoutPanelChunkSizes.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelChunkSizes.Size = new System.Drawing.Size(193, 40);
+            this.tableLayoutPanelChunkSizes.Size = new System.Drawing.Size(193, 42);
             this.tableLayoutPanelChunkSizes.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(89, 13);
+            this.label1.Location = new System.Drawing.Point(89, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(14, 13);
             this.label1.TabIndex = 2;
@@ -306,7 +315,7 @@ namespace ImageRepainterForms {
             // numericUpDownChunkWidth
             // 
             this.numericUpDownChunkWidth.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numericUpDownChunkWidth.Location = new System.Drawing.Point(4, 10);
+            this.numericUpDownChunkWidth.Location = new System.Drawing.Point(4, 11);
             this.numericUpDownChunkWidth.Minimum = new decimal(new int[] {
             2,
             0,
@@ -324,7 +333,7 @@ namespace ImageRepainterForms {
             // numericUpDownChunkHeight
             // 
             this.numericUpDownChunkHeight.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numericUpDownChunkHeight.Location = new System.Drawing.Point(132, 10);
+            this.numericUpDownChunkHeight.Location = new System.Drawing.Point(132, 11);
             this.numericUpDownChunkHeight.Minimum = new decimal(new int[] {
             2,
             0,
@@ -339,17 +348,29 @@ namespace ImageRepainterForms {
             0,
             0});
             // 
-            // checkBoxUseCustomListColor
+            // checkBoxCreatePaletteByImage
             // 
-            this.checkBoxUseCustomListColor.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.checkBoxUseCustomListColor.AutoSize = true;
-            this.checkBoxUseCustomListColor.Location = new System.Drawing.Point(3, 4);
-            this.checkBoxUseCustomListColor.Name = "checkBoxUseCustomListColor";
-            this.checkBoxUseCustomListColor.Size = new System.Drawing.Size(149, 30);
-            this.checkBoxUseCustomListColor.TabIndex = 7;
-            this.checkBoxUseCustomListColor.Text = "Использовать\rнастраиваемую палитру";
-            this.checkBoxUseCustomListColor.UseVisualStyleBackColor = true;
-            this.checkBoxUseCustomListColor.CheckedChanged += new System.EventHandler(this.checkBoxUseCustomListColor_CheckedChanged);
+            this.checkBoxCreatePaletteByImage.AutoSize = true;
+            this.checkBoxCreatePaletteByImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxCreatePaletteByImage.Location = new System.Drawing.Point(3, 3);
+            this.checkBoxCreatePaletteByImage.Name = "checkBoxCreatePaletteByImage";
+            this.checkBoxCreatePaletteByImage.Size = new System.Drawing.Size(193, 26);
+            this.checkBoxCreatePaletteByImage.TabIndex = 0;
+            this.checkBoxCreatePaletteByImage.Text = "Палитра на основе картинки";
+            this.checkBoxCreatePaletteByImage.UseVisualStyleBackColor = true;
+            this.checkBoxCreatePaletteByImage.CheckedChanged += new System.EventHandler(this.checkBoxCreatePaletteByImage_CheckedChanged);
+            // 
+            // checkBoxUseCustomPalette
+            // 
+            this.checkBoxUseCustomPalette.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBoxUseCustomPalette.AutoSize = true;
+            this.checkBoxUseCustomPalette.Location = new System.Drawing.Point(3, 5);
+            this.checkBoxUseCustomPalette.Name = "checkBoxUseCustomPalette";
+            this.checkBoxUseCustomPalette.Size = new System.Drawing.Size(149, 30);
+            this.checkBoxUseCustomPalette.TabIndex = 7;
+            this.checkBoxUseCustomPalette.Text = "Использовать\rнастраиваемую палитру";
+            this.checkBoxUseCustomPalette.UseVisualStyleBackColor = true;
+            this.checkBoxUseCustomPalette.CheckedChanged += new System.EventHandler(this.checkBoxUseCustomPalette_CheckedChanged);
             // 
             // openFileDialogPalette
             // 
@@ -366,67 +387,80 @@ namespace ImageRepainterForms {
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 88F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(820, 479);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 92F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(826, 517);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 2;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80.17242F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.82759F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80.36585F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.63415F));
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.groupBox2, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel6, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(814, 385);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(820, 419);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.ColumnCount = 1;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxUseCustomListColor, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxUseCustomPalette, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.groupBoxListColors, 0, 1);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(655, 3);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(661, 3);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.02639F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 89.97362F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(156, 379);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(156, 413);
             this.tableLayoutPanel4.TabIndex = 1;
             // 
-            // timerCheckingProcessImage
+            // tableLayoutPanel6
             // 
-            this.timerCheckingProcessImage.Tick += new System.EventHandler(this.timerCheckingProcessImage_Tick);
+            this.tableLayoutPanel6.ColumnCount = 1;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Controls.Add(this.groupBox2, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.progressBarImageProcessing, 0, 1);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 2;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 93.38422F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.615776F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(652, 413);
+            this.tableLayoutPanel6.TabIndex = 2;
             // 
-            // tableLayoutPanel5
+            // progressBarImageProcessing
             // 
-            this.tableLayoutPanel5.ColumnCount = 1;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Controls.Add(this.comboBoxColorModels, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.buttonProcessImage, 0, 1);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 2;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34.93976F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65.06024F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(197, 76);
-            this.tableLayoutPanel5.TabIndex = 11;
+            this.progressBarImageProcessing.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBarImageProcessing.Location = new System.Drawing.Point(3, 388);
+            this.progressBarImageProcessing.Name = "progressBarImageProcessing";
+            this.progressBarImageProcessing.Size = new System.Drawing.Size(646, 22);
+            this.progressBarImageProcessing.Step = 1;
+            this.progressBarImageProcessing.TabIndex = 4;
+            // 
+            // timerThreadIsAlive
+            // 
+            this.timerThreadIsAlive.Tick += new System.EventHandler(this.timerThreadIsAlive_Tick);
+            // 
+            // timerProgressBarUpdate
+            // 
+            this.timerProgressBarUpdate.Tick += new System.EventHandler(this.timerProgressBarUpdate_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(820, 503);
+            this.ClientSize = new System.Drawing.Size(826, 541);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.menuStrip1);
-            this.MinimumSize = new System.Drawing.Size(836, 542);
+            this.MinimumSize = new System.Drawing.Size(842, 580);
             this.Name = "Form1";
             this.Text = "Замена цвета";
             this.menuStrip1.ResumeLayout(false);
@@ -436,6 +470,7 @@ namespace ImageRepainterForms {
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanelPaletteByImage.ResumeLayout(false);
             this.tableLayoutPanelPaletteByImage.PerformLayout();
             this.tableLayoutPanelChunkSizes.ResumeLayout(false);
@@ -446,7 +481,7 @@ namespace ImageRepainterForms {
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
-            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -478,16 +513,19 @@ namespace ImageRepainterForms {
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanelPaletteByImage;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanelChunkSizes;
         public System.Windows.Forms.Label label1;
-        public System.Windows.Forms.CheckBox checkBoxUseCustomListColor;
+        public System.Windows.Forms.CheckBox checkBoxUseCustomPalette;
         public System.Windows.Forms.ComboBox comboBoxColorModels;
-        public System.Windows.Forms.CheckBox checkBoxPaletteByImage;
+        public System.Windows.Forms.CheckBox checkBoxCreatePaletteByImage;
         public System.Windows.Forms.NumericUpDown numericUpDownChunkWidth;
         public System.Windows.Forms.NumericUpDown numericUpDownChunkHeight;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        public System.Windows.Forms.Timer timerCheckingProcessImage;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        public System.Windows.Forms.Timer timerThreadIsAlive;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        public System.Windows.Forms.ProgressBar progressBarImageProcessing;
+        public System.Windows.Forms.Timer timerProgressBarUpdate;
     }
 }
 

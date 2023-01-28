@@ -212,6 +212,10 @@ namespace ImageRepainterForms {
             // 
             this.openFileDialogImage.RestoreDirectory = true;
             // 
+            // saveFileDialogImage
+            // 
+            this.saveFileDialogImage.Filter = "PNG (*.png)|*.png";
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 4;
@@ -376,6 +380,10 @@ namespace ImageRepainterForms {
             // 
             this.openFileDialogPalette.RestoreDirectory = true;
             // 
+            // saveFileDialogPalette
+            // 
+            this.saveFileDialogPalette.Filter = "PNG (*.png)|*.png";
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 1;
@@ -453,7 +461,7 @@ namespace ImageRepainterForms {
             // 
             this.timerProgressBarUpdate.Tick += new System.EventHandler(this.timerProgressBarUpdate_Tick);
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -461,7 +469,7 @@ namespace ImageRepainterForms {
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.menuStrip1);
             this.MinimumSize = new System.Drawing.Size(842, 580);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Замена цвета";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

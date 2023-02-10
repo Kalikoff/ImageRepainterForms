@@ -1,32 +1,34 @@
 ﻿using ColorHelper;
+using ImageRepainterForms.Model.StaticFields;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace ImageRepainterForms {
-    class MultiColorModelProcessImage {
+namespace ImageRepainterForms.Model {
+    /// <summary>
+    /// Обработка изображений в различных цветовых моделях
+    /// </summary>
+    class ImageProcessingInDifferentColorModels {
         private List<IColor> _listColorPalette; // List цветов выбранной цветовой модели
         private int[,] _differenceBetweenColorsIColor; // Разница по каждому каналу в выбранной цветовой модели
         private int[] _sumDifferenceBetweenColorsIColor; // Сумма разницц по каждому каналу в выбранной цветовой модели
-        private Bitmap _changedImage; // Обработанное изображение
-        private static int _imageProcessingProgress; // Прогресс обработки изображения (от 0 до 100)
+        private int _imageProcessingProgress; // Прогресс обработки изображения (от 0 до 100)
 
         /// <summary>
-        /// Обработать изображение в выбранной цветовой модели
+        /// Обработка изображения в выбранной цветовой модели
         /// </summary>
         /// <param name="listColorsPalette"></param>
         /// <param name="sourceImage"></param>
         /// <param name="nameColorModel"></param>
-        /// <returns></returns>
-        public Bitmap ProcessImageInSelectedColorModel(List<Color> listColorsPalette, Bitmap sourceImage, string nameColorModel) {
-            _changedImage = (Bitmap)sourceImage.Clone();
+        /// <returns>Обработанное изображение</returns>
+        public Bitmap ProcessImageInSelectedColorModel(string nameColorModel) {
+            Bitmap processedImage = (Bitmap)SourceImage.s_sourceImage.Clone();
+            _listColorPalette = new List<IColor>();
             _imageProcessingProgress = 0;
 
-            int numberPixelsInImage = sourceImage.Width * sourceImage.Height; // Количество пикселей в изображении
+            int numberPixelsInImage = SourceImage.s_sourceImage.Width * SourceImage.s_sourceImage.Height; // Количество пикселей в изображении
 
-            _listColorPalette = new List<IColor>();
-
-            foreach (Color color in listColorsPalette) {
+            foreach (Color color in ListColor.s_ListColor) {
                 IColor iColor = null;
                 RGB rgb = new RGB(color.R, color.G, color.B);
 
@@ -40,12 +42,12 @@ namespace ImageRepainterForms {
                 _listColorPalette.Add(iColor);
             }
 
-            for (int i = 0; i < _changedImage.Height; i++) {
-                for (int j = 0; j < _changedImage.Width; j++) {
+            for (int i = 0; i < processedImage.Height; i++) {
+                for (int j = 0; j < processedImage.Width; j++) {
                     _differenceBetweenColorsIColor = new int[3, _listColorPalette.Count];
                     _sumDifferenceBetweenColorsIColor = new int[_listColorPalette.Count];
 
-                    Color pixelColor = _changedImage.GetPixel(j, i);
+                    Color pixelColor = processedImage.GetPixel(j, i);
 
                     for (int k = 0; k < _listColorPalette.Count; k++) {
                         GetDifferenceBetweenColorsIColor(pixelColor, k, nameColorModel);
@@ -61,16 +63,16 @@ namespace ImageRepainterForms {
                         }
                     }
 
-                    Color replaceableColor = listColorsPalette[indexMin];
+                    Color replaceableColor = ListColor.s_ListColor[indexMin];
 
-                    _changedImage.SetPixel(j, i, replaceableColor);
+                    processedImage.SetPixel(j, i, replaceableColor);
 
                     int numberProcessedPixels = (i + 1) * (j + 1); // Количество обработанных пикселей
                     _imageProcessingProgress = numberProcessedPixels / (numberPixelsInImage / 100);
                 }
             }
 
-            return _changedImage;
+            return processedImage;
         }
 
         /// <summary>

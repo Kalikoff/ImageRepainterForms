@@ -61,25 +61,52 @@ namespace ImageRepainterForms.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Добавьте цвета!.
+        ///   Ищет локализованную строку, похожую на Справка по приложению.
         /// </summary>
-        internal static string infoAddColors {
+        internal static string captionApplicationHelp {
             get {
-                return ResourceManager.GetString("infoAddColors", resourceCulture);
+                return ResourceManager.GetString("captionApplicationHelp", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Добавьте цвета для замены!.
+        ///   Ищет локализованную строку, похожую на Ошибка!.
         /// </summary>
-        internal static string infoAddColorsToReplace {
+        internal static string captionEror {
             get {
-                return ResourceManager.GetString("infoAddColorsToReplace", resourceCulture);
+                return ResourceManager.GetString("captionEror", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Выберите правильную цветовую модель!.
+        ///   Ищет локализованную строку, похожую на Успех!.
+        /// </summary>
+        internal static string captionSuccess {
+            get {
+                return ResourceManager.GetString("captionSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Добавьте цвета для обработки изображения!.
+        /// </summary>
+        internal static string infoAddColorsForProcessing {
+            get {
+                return ResourceManager.GetString("infoAddColorsForProcessing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Добавьте цвета для сохранения палитры!.
+        /// </summary>
+        internal static string infoAddColorsToSavePalette {
+            get {
+                return ResourceManager.GetString("infoAddColorsToSavePalette", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Выберите существующую цветовую модель!.
         /// </summary>
         internal static string infoChooseRightColorModel {
             get {
@@ -97,11 +124,29 @@ namespace ImageRepainterForms.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Загрузите изображение!.
+        ///   Ищет локализованную строку, похожую на Изображение обработано!.
         /// </summary>
-        internal static string infoEmptyUploadedImage {
+        internal static string infoImageFinishedProcessing {
             get {
-                return ResourceManager.GetString("infoEmptyUploadedImage", resourceCulture);
+                return ResourceManager.GetString("infoImageFinishedProcessing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на В буфере обмена нет изображения!.
+        /// </summary>
+        internal static string infoNoImageOnClipboard {
+            get {
+                return ResourceManager.GetString("infoNoImageOnClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Палитра создана!.
+        /// </summary>
+        internal static string infoPaletteCreated {
+            get {
+                return ResourceManager.GetString("infoPaletteCreated", resourceCulture);
             }
         }
         
@@ -133,6 +178,15 @@ namespace ImageRepainterForms.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Загрузите изображение!.
+        /// </summary>
+        internal static string infoUploadSourceImage {
+            get {
+                return ResourceManager.GetString("infoUploadSourceImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Удалить.
         /// </summary>
         internal static string textDelete {
@@ -142,11 +196,19 @@ namespace ImageRepainterForms.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Изображение обработано!.
+        ///   Ищет локализованную строку, похожую на Приложение - Перерисовщик изображений
+        ///
+        ///Приложение обрабатывает пиксели загруженного изображения, заменяя их более подходящими из палитры для выбранной цветовой модели.
+        ///
+        ///Изображение для обработки может быть загружено как из файла, так и комбинацией Ctrl+V на главной форме.
+        ///
+        ///Палитра может быть создана и настроена разными способами.
+        ///Вы можете загрузить палитру из файла, настроить ее вручную, а также сделать так, чтобы программа создала её на основе загруженного изображения.
+        ///При создании палитры на осно [остаток строки не уместился]&quot;;.
         /// </summary>
-        internal static string textImageFinishedProcessing {
+        internal static string textGetInfo {
             get {
-                return ResourceManager.GetString("textImageFinishedProcessing", resourceCulture);
+                return ResourceManager.GetString("textGetInfo", resourceCulture);
             }
         }
     }

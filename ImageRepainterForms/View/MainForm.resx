@@ -117,64 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="infoEmptyImageToSave" xml:space="preserve">
-    <value>Вы не обработали изображение!</value>
-  </data>
-  <data name="infoUploadSourceImage" xml:space="preserve">
-    <value>Загрузите изображение!</value>
-  </data>
-  <data name="infoPaletteNotCreated" xml:space="preserve">
-    <value>Палитра не создана!</value>
-  </data>
-  <data name="infoPaletteNotUploaded" xml:space="preserve">
-    <value>Вы не загрузили палитру!</value>
-  </data>
-  <data name="textDelete" xml:space="preserve">
-    <value>Удалить</value>
-  </data>
-  <data name="infoImageFinishedProcessing" xml:space="preserve">
-    <value>Изображение обработано!</value>
-  </data>
-  <data name="infoAddColorsToSavePalette" xml:space="preserve">
-    <value>Добавьте цвета для сохранения палитры!</value>
-  </data>
-  <data name="infoChooseRightColorModel" xml:space="preserve">
-    <value>Выберите существующую цветовую модель!</value>
-  </data>
-  <data name="infoTurnOffImageBasedPalette" xml:space="preserve">
-    <value>Выключите режим "Палитра на основе картинки", для загрузки своей палитры!</value>
-  </data>
-  <data name="infoNoImageOnClipboard" xml:space="preserve">
-    <value>В буфере обмена нет изображения!</value>
-  </data>
-  <data name="infoAddColorsForProcessing" xml:space="preserve">
-    <value>Добавьте цвета для обработки изображения!</value>
-  </data>
-  <data name="captionApplicationHelp" xml:space="preserve">
-    <value>Справка по приложению</value>
-  </data>
-  <data name="captionEror" xml:space="preserve">
-    <value>Ошибка!</value>
-  </data>
-  <data name="captionSuccess" xml:space="preserve">
-    <value>Успех!</value>
-  </data>
-  <data name="infoPaletteCreated" xml:space="preserve">
-    <value>Палитра создана!</value>
-  </data>
-  <data name="textGetInfo" xml:space="preserve">
-    <value>Приложение - Перерисовщик изображений
-
-Приложение обрабатывает пиксели загруженного изображения, заменяя их более подходящими из палитры для выбранной цветовой модели.
-
-Изображение для обработки может быть загружено как из файла, так и комбинацией Ctrl+V на главной форме.
-
-Палитра может быть создана и настроена разными способами.
-Вы можете загрузить палитру из файла, настроить ее вручную, а также сделать так, чтобы программа создала её на основе загруженного изображения.
-При создании палитры на основе изображения вам будет предложено выбрать количество чанков. Чанки будут делить изображение на равные части, и в каждом таком фрагменте будет вычисляться средний цвет в пространстве цветов RGB. И тогда полученный цвет будет добавлен в палитру, если до него не было точно такого же цвета.
-
-Эффекты готовые алгоритмы, изменяют загруженное изображение.
-
-Текущая версия приложения v1.2</value>
-  </data>
+  <metadata name="tableLayoutPanelMain.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="colorDialogSelectionPictureBox.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>132, 17</value>
+  </metadata>
+  <metadata name="openFileDialogImage.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>354, 17</value>
+  </metadata>
+  <metadata name="saveFileDialogImage.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>521, 17</value>
+  </metadata>
+  <metadata name="openFileDialogPalette.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>684, 17</value>
+  </metadata>
+  <metadata name="saveFileDialogPalette.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>844, 16</value>
+  </metadata>
+  <metadata name="timerThreadIsAlive.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1001, 15</value>
+  </metadata>
+  <metadata name="timerProgressBarUpdate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1143, 14</value>
+  </metadata>
 </root>

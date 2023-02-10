@@ -4,6 +4,8 @@ using System.Drawing.Imaging;
 using System.Threading;
 using System.Windows.Forms;
 using ImageRepainterForms.View;
+using System;
+using System.IO;
 
 namespace ImageRepainterForms.Model {
     /// <summary>
@@ -28,6 +30,24 @@ namespace ImageRepainterForms.Model {
             checks = new Checks();
             imageProcessingInDifferentColorModels = new ImageProcessingInDifferentColorModels();
             effects = new Effects();
+        }
+
+        /// <summary>
+        /// Установить пути по умолчанию для диалогов
+        /// </summary>
+        public void SetPaths() {
+            string imagesPath = AppDomain.CurrentDomain.BaseDirectory + "Images";
+            string resultsPath = AppDomain.CurrentDomain.BaseDirectory + "Results";
+            string palettePath = AppDomain.CurrentDomain.BaseDirectory + "Palette";
+
+            CreateDirectoryIfDoesntExist(imagesPath);
+            CreateDirectoryIfDoesntExist(resultsPath);
+            CreateDirectoryIfDoesntExist(palettePath);
+
+            mainForm.openFileDialogImage.InitialDirectory = imagesPath;
+            mainForm.saveFileDialogImage.InitialDirectory = resultsPath;
+            mainForm.openFileDialogPalette.InitialDirectory = palettePath;
+            mainForm.saveFileDialogPalette.InitialDirectory = palettePath;
         }
 
         /// <summary>
@@ -219,6 +239,16 @@ namespace ImageRepainterForms.Model {
         /// <param name="bitmap"></param>
         private void SetImageToPictureBox(Bitmap bitmap) {
             mainForm.pictureBoxPreview.Image = new Bitmap(bitmap);
+        }
+
+        /// <summary>
+        /// Создать каталог, если он не существует
+        /// </summary>
+        /// <param name="path">Путь к каталогу</param>
+        private void CreateDirectoryIfDoesntExist(string path) {
+            if (!Directory.Exists(path)) {
+                Directory.CreateDirectory(path);
+            }
         }
     }
 }

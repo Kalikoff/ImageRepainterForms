@@ -33,7 +33,7 @@ namespace ImageRepainterForms.View {
             this.progressBarImageProcessing = new System.Windows.Forms.ProgressBar();
             this.groupBoxPictureBox = new System.Windows.Forms.GroupBox();
             this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStripTabs = new System.Windows.Forms.MenuStrip();
             this.imageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageLoadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +59,7 @@ namespace ImageRepainterForms.View {
             this.tableLayoutPanelPrevie.SuspendLayout();
             this.groupBoxPictureBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
-            this.menuStrip1.SuspendLayout();
+            this.menuStripTabs.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelMain
@@ -112,7 +112,7 @@ namespace ImageRepainterForms.View {
             "HSL",
             "HSV",
             "XYZ"});
-            this.comboBoxColorModels.Location = new System.Drawing.Point(476, 20);
+            this.comboBoxColorModels.Location = new System.Drawing.Point(476, 17);
             this.comboBoxColorModels.Name = "comboBoxColorModels";
             this.comboBoxColorModels.Size = new System.Drawing.Size(240, 28);
             this.comboBoxColorModels.TabIndex = 1;
@@ -163,20 +163,20 @@ namespace ImageRepainterForms.View {
             this.pictureBoxPreview.TabIndex = 0;
             this.pictureBoxPreview.TabStop = false;
             // 
-            // menuStrip1
+            // menuStripTabs
             // 
-            this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStripTabs.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.menuStripTabs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.imageToolStripMenuItem,
             this.paletteToolStripMenuItem,
             this.effectsToolStripMenuItem,
             this.getInfoToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(801, 31);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStripTabs.Location = new System.Drawing.Point(0, 0);
+            this.menuStripTabs.Name = "menuStripTabs";
+            this.menuStripTabs.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.menuStripTabs.Size = new System.Drawing.Size(801, 31);
+            this.menuStripTabs.TabIndex = 0;
+            this.menuStripTabs.Text = "menuStrip1";
             // 
             // imageToolStripMenuItem
             // 
@@ -190,14 +190,14 @@ namespace ImageRepainterForms.View {
             // imageLoadToolStripMenuItem
             // 
             this.imageLoadToolStripMenuItem.Name = "imageLoadToolStripMenuItem";
-            this.imageLoadToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.imageLoadToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
             this.imageLoadToolStripMenuItem.Text = "Загрузить";
             this.imageLoadToolStripMenuItem.Click += new System.EventHandler(this.imageLoadToolStripMenuItem_Click);
             // 
             // imageSaveToolStripMenuItem
             // 
             this.imageSaveToolStripMenuItem.Name = "imageSaveToolStripMenuItem";
-            this.imageSaveToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
+            this.imageSaveToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
             this.imageSaveToolStripMenuItem.Text = "Сохранить";
             this.imageSaveToolStripMenuItem.Click += new System.EventHandler(this.imageSaveToolStripMenuItem_Click);
             // 
@@ -300,10 +300,10 @@ namespace ImageRepainterForms.View {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 660);
             this.Controls.Add(tableLayoutPanelMain);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStripTabs);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.KeyPreview = true;
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.menuStripTabs;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimumSize = new System.Drawing.Size(817, 699);
             this.Name = "MainForm";
@@ -314,8 +314,8 @@ namespace ImageRepainterForms.View {
             this.tableLayoutPanelPrevie.ResumeLayout(false);
             this.groupBoxPictureBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStripTabs.ResumeLayout(false);
+            this.menuStripTabs.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -323,7 +323,7 @@ namespace ImageRepainterForms.View {
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStripTabs;
         private System.Windows.Forms.ColorDialog colorDialogSelectionPictureBox;
         public System.Windows.Forms.OpenFileDialog openFileDialogImage;
         public System.Windows.Forms.SaveFileDialog saveFileDialogImage;

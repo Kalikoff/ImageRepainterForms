@@ -9,13 +9,11 @@ namespace ImageRepainterForms.View {
         public MainForm() {
             InitializeComponent();
 
-            openFileDialogImage.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Images";
-            saveFileDialogImage.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Results";
-            openFileDialogPalette.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Palette";
-            saveFileDialogPalette.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Palette";
             comboBoxColorModels.SelectedIndex = 0;
 
             mainFormLogic = new MainFormLogic(this);
+
+            mainFormLogic.SetPaths();
         }
 
         /// <summary>
